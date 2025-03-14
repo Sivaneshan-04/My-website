@@ -455,14 +455,6 @@
 	 <div id="message-success" style="display:none;">
 		<i class="fa fa-check"></i>Your message was sent, thank you!<br>
 	 </div>
-	 
-
-<!-- Warning and Success messages -->
-<div id="message-warning" style="display:none;">Error sending message</div>
-<div id="message-success" style="display:none;">
-   <i class="fa fa-check"></i>Your message was sent, thank you!<br>
-</div>
-
 
    	<div class="row contact-info">
 
@@ -565,37 +557,31 @@
    <script src="js/main.js"></script>
    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-   $(document).ready(function() {
-      $('#contactForm').on('submit', function(event) {
-         event.preventDefault();  // Prevent the form from submitting normally
+   document.getElementById("contactForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent the default form submission
 
-         // Show the loader
-         $('#submit-loader').show();
+    var formData = new FormData(this);
 
-         // AJAX request
-         $.ajax({
-            type: 'POST',
-            url: 'contact.php',  // The script where data will be sent
-            data: $(this).serialize(),
-            success: function(response) {
-               $('#submit-loader').hide();  // Hide the loader
-               
-               if (response == 'success') {
-                  $('#message-warning').hide();
-                  $('#message-success').fadeIn();
-               } else {
-                  $('#message-warning').html(response);
-                  $('#message-warning').fadeIn();
-               }
-            },
-            error: function() {
-               $('#submit-loader').hide();
-               $('#message-warning').html("Something went wrong. Please try again.");
-               $('#message-warning').fadeIn();
-            }
-         });
-      });
-   });
+    // Show the loader
+    document.getElementById("submit-loader").style.display = "block";
+
+    // Send form data using AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "contact.php", true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            // Success message
+            document.getElementById("message-success").style.display = "block";
+            document.getElementById("submit-loader").style.display = "none";
+        } else {
+            // Error message
+            document.getElementById("message-warning").style.display = "block";
+            document.getElementById("submit-loader").style.display = "none";
+        }
+    };
+    xhr.send(formData);
+});
+
 </script>
 
 

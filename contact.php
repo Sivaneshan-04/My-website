@@ -1,32 +1,32 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Form fields
     $name = $_POST['contactName'];
     $email = $_POST['contactEmail'];
     $subject = $_POST['contactSubject'];
     $message = $_POST['contactMessage'];
 
-    // Basic validation
-    if (empty($name) || empty($email) || empty($message)) {
-        echo 'Please fill all the required fields.';
-        exit;
-    }
+    // Email settings
+    $to = "sivaneshankg12@gmail.com"; // Replace with your email address
+    $from = $email;
+    $headers = "From: $from" . "\r\n" . "Reply-To: $from" . "\r\n" . "Content-Type: text/html; charset=UTF-8";
 
-    // Email parameters
-    $to = "your-email@example.com";  // Replace with your email address
-    $email_subject = "New Contact Form Submission: $subject";
-    $email_body = "Name: $name\n";
-    $email_body .= "Email: $email\n";
-    $email_body .= "Message:\n$message\n";
+    // Email content
+    $email_subject = "New Message from: $name";
+    $email_body = "<html><body>";
+    $email_body .= "<h2>Contact Form Submission</h2>";
+    $email_body .= "<p><strong>Name:</strong> $name</p>";
+    $email_body .= "<p><strong>Email:</strong> $email</p>";
+    $email_body .= "<p><strong>Subject:</strong> $subject</p>";
+    $email_body .= "<p><strong>Message:</strong></p>";
+    $email_body .= "<p>$message</p>";
+    $email_body .= "</body></html>";
 
-    // Headers
-    $headers = "From: $email\n";
-    $headers .= "Reply-To: $email";
-
-    // Send the email
+    // Send email
     if (mail($to, $email_subject, $email_body, $headers)) {
-        echo 'success';  // This will be checked by the JavaScript
+        echo "<div id='message-success' style='display:block;'>Your message was sent, thank you!</div>";
     } else {
-        echo 'Error sending message. Please try again.';
+        echo "<div id='message-warning' style='display:block;'>Error sending message</div>";
     }
 }
 ?>
